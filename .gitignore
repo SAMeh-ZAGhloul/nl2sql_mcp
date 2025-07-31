@@ -27,8 +27,9 @@ ENV/
 # Environment Variables
 .env
 
-# Database
+# Database - allow hr.db for demo
 *.db
+!hr.db
 
 # IDE
 .vscode/
