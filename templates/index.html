@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NL to SQL - SQLite HR</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="p-4">
+<div class="container">
+    <h2>Ask the HR Database</h2>
+    <form method="POST">
+        <label for="question" class="form-label">Enter your question in natural language:</label>
+        <input list="suggestions" name="question" id="question" class="form-control" placeholder="e.g., List employees in IT department" required>
+        <datalist id="suggestions">
+            <option value="List all employees">
+            <option value="Show salaries by department">
+            <option value="Get employee names and job titles">
+            <option value="Find employees hired after 2020">
+        </datalist>
+        <button class="btn btn-primary mt-2">Submit</button>
+    </form>
+
+    {% if query %}
+        <h5 class="mt-4">Generated SQL:</h5>
+        <pre>{{ query }}</pre>
+    {% endif %}
+
+    {% if result %}
+        <h5 class="mt-4">Result:</h5>
+        {{ result|safe }}
+    {% endif %}
+
+    {% if error %}
+        <div class="alert alert-danger mt-4">{{ error }}</div>
+    {% endif %}
+
+    <h5 class="mt-5">📘 Schema Reference</h5>
+    <div class="row">
+        {% for table, columns in schema.items() %}
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-header bg-secondary text-white"><strong>{{ table }}</strong></div>
+                <ul class="list-group list-group-flush">
+                    {% for col in columns %}
+                    <li class="list-group-item">{{ col }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>
