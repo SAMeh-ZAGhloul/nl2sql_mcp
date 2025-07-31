@@ -2,6 +2,44 @@
 
 This project is a microservices-based Flask application that converts natural language questions into SQL queries. It uses the Model Context Protocol (MCP) architecture to separate concerns between the Gemini API service and SQLite database service.
 
+## Key Benefits of MCP Architecture
+
+### 1. Schema Flexibility
+The system is completely database-schema agnostic. You can change the database structure without modifying any code:
+- SQLite MCP automatically discovers tables and columns
+- Gemini MCP adapts to any schema description
+- UI dynamically updates to show new schema
+- Only need to update `init.sql` and recreate `hr.db`
+
+### 2. Separation of Concerns
+Each service has a specific responsibility:
+- Main App (5555): User interface and service coordination
+- Gemini MCP (5556): Natural language to SQL conversion
+- SQLite MCP (5557): Database operations and schema management
+
+### 3. Standardized Interfaces
+Clear, well-defined JSON API endpoints:
+```
+Gemini MCP:
+POST /nl2sql
+Request: {"question": "...", "schema": "..."}
+Response: {"sql": "...", "status": "success"}
+
+SQLite MCP:
+GET /schema
+Response: {"schema": "...", "status": "success"}
+
+POST /query
+Request: {"sql": "..."}
+Response: {"result": [...], "columns": [...], "status": "success"}
+```
+
+### 4. Enhanced Maintainability
+- Independent scaling of services
+- Isolated testing of components
+- Clear error handling per service
+- Easy to add new features or services
+
 ## Architecture
 
 The application consists of three main components:
