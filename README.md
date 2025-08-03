@@ -27,24 +27,24 @@ nl2sql_mcp/
 ```mermaid
 graph TD
     subgraph "User Interface"
-        A[Web Browser]
+        A["Web Browser"]
     end
 
     subgraph "Frontend (Port 5555)"
-        B[Flask App]
+        B["Flask App"]
     end
 
     subgraph "MCP Servers"
-        C[Gemini Server (5556)]
-        D[SQLite Server (5557)]
+        C["Gemini Server (5556)"]
+        D["SQLite Server (5557)"]
     end
 
     subgraph "External Services"
-        E[Gemini API]
+        E["Gemini API"]
     end
 
     subgraph "Database"
-        F[HR Database]
+        F["HR Database"]
     end
 
     A -- "HTTP Request" --> B
