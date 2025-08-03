@@ -25,24 +25,39 @@ nl2sql_mcp/
 ## Architecture
 
 ```mermaid
-architecture-beta
-    group frontend(cloud)[Frontend]
-        service web(server)[Web 5555] in frontend
+graph TD
+    subgraph "User Interface"
+        A[Web Browser]
+    end
 
-    group backend(cloud)[Backend]
-        service app(server)[Flask] in backend
+    subgraph "Frontend (Port 5555)"
+        B[Flask App]
+    end
 
-    group mcp(cloud)[MCP]
-        service gemini(server)[Gemini 5556] in mcp
-        service sqlite(database)[SQLite 5557] in mcp
-        service db(disk)[HR DB] in mcp
-        service api(internet)[Gemini API] in mcp
+    subgraph "MCP Servers"
+        C[Gemini Server (5556)]
+        D[SQLite Server (5557)]
+    end
 
-    web:B -- T:app
-    app:R -- L:gemini
-    gemini:R -- L:api
-    app:R -- L:sqlite
-    sqlite:B -- T:db
+    subgraph "External Services"
+        E[Gemini API]
+    end
+
+    subgraph "Database"
+        F[HR Database]
+    end
+
+    A -- "HTTP Request" --> B
+    B -- "NLQ-to-SQL Request" --> C
+    C -- "API Call" --> E
+    E -- "SQL Response" --> C
+    C -- "SQL Query" --> B
+    B -- "DB Schema Request" --> D
+    D -- "Schema Info" --> B
+    B -- "Execute SQL" --> D
+    D -- "Query Result" --> B
+    D -- "DB Access" --> F
+    B -- "HTML Response" --> A
 ```
 
 ### MCP Server Details
@@ -138,7 +153,7 @@ Response: {"result": [...], "columns": [...], "status": "success"}
 - Clear error handling per service
 - Easy to add new features or services
 
-## Architecture
+## Components
 
 The application consists of three main components:
 
