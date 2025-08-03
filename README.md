@@ -2,6 +2,49 @@
 
 This project is a microservices-based Flask application that converts natural language questions into SQL queries. It uses the Model Context Protocol (MCP) architecture to separate concerns between the Gemini API service and SQLite database service.
 
+## Project Structure
+
+```
+nl2sql_mcp/
+├── backend/
+│   ├── app.py              # Main Flask application
+│   └── requirements.txt    # Python dependencies
+├── db/
+│   ├── hr.db              # SQLite database
+│   └── init.sql           # Database initialization script
+├── frontend/
+│   └── templates/
+│       └── index.html     # Web interface template
+└── mcp/
+    ├── gemini_server/
+    │   └── server.py      # Gemini MCP implementation
+    └── sqlite_server/
+        └── server.py      # SQLite MCP implementation
+```
+
+## Architecture
+
+```mermaid
+architecture-beta
+    group frontend(cloud)[Frontend Layer]
+        service web(server)[Web Interface] in frontend
+
+    group backend(cloud)[Backend Layer]
+        service app(server)[Flask App] in backend
+        service static(disk)[Static Files] in backend
+
+    group mcp(cloud)[MCP Services]
+        service gemini(server)[Gemini MCP] in mcp
+        service sqlite(database)[SQLite MCP] in mcp
+        service db(disk)[HR Database] in mcp
+
+    web:B -- T:app
+    app:R -- L:gemini
+    app:R -- L:sqlite
+    sqlite:B -- T:db
+    gemini:B -- T:db
+```
+
 ## Key Benefits of MCP Architecture
 
 ### 1. Schema Flexibility
