@@ -26,24 +26,79 @@ nl2sql_mcp/
 
 ```mermaid
 architecture-beta
-    group frontend(cloud)[Frontend Layer]
-        service web(server)[Web Interface] in frontend
+    group frontend(cloud)[Frontend]
+        service web(server)[Web 5555] in frontend
 
-    group backend(cloud)[Backend Layer]
-        service app(server)[Flask App] in backend
-        service static(disk)[Static Files] in backend
+    group backend(cloud)[Backend]
+        service app(server)[Flask] in backend
 
-    group mcp(cloud)[MCP Services]
-        service gemini(server)[Gemini MCP] in mcp
-        service sqlite(database)[SQLite MCP] in mcp
-        service db(disk)[HR Database] in mcp
+    group mcp(cloud)[MCP]
+        service gemini(server)[Gemini 5556] in mcp
+        service sqlite(database)[SQLite 5557] in mcp
+        service db(disk)[HR DB] in mcp
+        service api(internet)[Gemini API] in mcp
 
     web:B -- T:app
     app:R -- L:gemini
+    gemini:R -- L:api
     app:R -- L:sqlite
     sqlite:B -- T:db
-    gemini:B -- T:db
 ```
+
+### MCP Server Details
+
+#### 1. Gemini MCP Server (Port 5556)
+- **Endpoint**: `/nl2sql`
+- **Method**: POST
+- **Input**:
+  ```json
+  {
+    "question": "Natural language question",
+    "schema": "Database schema description"
+  }
+  ```
+- **Output**:
+  ```json
+  {
+    "sql": "Generated SQL query",
+    "status": "success"
+  }
+  ```
+- **Features**:
+  - Natural Language to SQL conversion
+  - Context-aware query generation
+  - Schema-based validation
+  - Error handling with detailed messages
+
+#### 2. SQLite MCP Server (Port 5557)
+- **Endpoints**: 
+  1. `/schema` (GET)
+     ```json
+     {
+       "schema": "Table descriptions",
+       "status": "success"
+     }
+     ```
+  2. `/query` (POST)
+     - Input:
+       ```json
+       {
+         "sql": "SQL query to execute"
+       }
+       ```
+     - Output:
+       ```json
+       {
+         "result": ["Query results"],
+         "columns": ["Column names"],
+         "status": "success"
+       }
+       ```
+- **Features**:
+  - Schema introspection
+  - Query execution
+  - Result formatting
+  - Error handling with SQL-specific details
 
 ## Key Benefits of MCP Architecture
 
