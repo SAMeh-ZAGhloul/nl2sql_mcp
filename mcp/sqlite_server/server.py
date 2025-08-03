@@ -5,7 +5,7 @@ from functools import wraps
 
 app = Flask(__name__)
 
-DB_PATH = "../hr.db"
+DB_PATH = "../../db/hr.db"
 
 def mcp_endpoint(f):
     @wraps(f)

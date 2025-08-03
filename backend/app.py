@@ -1,7 +1,8 @@
-import requests
+import requests, os
 from flask import Flask, request, render_template
 
-app = Flask(__name__)
+template_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'frontend/templates'))
+app = Flask(__name__, template_folder=template_dir)
 
 GEMINI_SERVER = "http://localhost:5556"
 SQLITE_SERVER = "http://localhost:5557"
@@ -78,4 +79,4 @@ def index():
     return render_template("index.html", query=query, result=result, error=error, schema=schema)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5555)
+    app.run(host="0.0.0.0", port=5555, debug=True)
