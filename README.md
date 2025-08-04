@@ -177,8 +177,13 @@ The application consists of three main components:
 
 - Convert natural language questions to SQL queries using Gemini API
 - Execute SQL queries against SQLite database
-- Display results in a user-friendly table format
-- View database schema on web interface
+- Interactive data visualization dashboard with multiple chart types:
+  - Bar charts
+  - Line charts
+  - Pie charts
+- Automatic data visualization based on query results
+- Display results in both table and chart formats
+- Dynamic schema reference interface
 - Microservices architecture for better scalability and maintenance
 - Standardized JSON API endpoints
 
@@ -216,7 +221,36 @@ The database contains the following tables:
 
 ## Running the Application
 
-Start each component in a separate terminal:
+### Using the Start Script
+
+The easiest way to run all components is using the provided start script:
+
+1. Make sure you have tmux installed:
+   ```bash
+   brew install tmux   # For macOS
+   # or
+   sudo apt install tmux   # For Ubuntu/Debian
+   ```
+
+2. Run the start script:
+   ```bash
+   ./start.sh
+   ```
+
+This will:
+- Start all three services in a tmux session
+- Open a split view to monitor all services
+- Automatically handle the correct startup order
+
+Tmux Navigation:
+- `Ctrl + b` then arrow keys: Switch between panes
+- `Ctrl + b` then `d`: Detach from session
+- `tmux attach -t nl2sql`: Reattach to session
+- `Ctrl + b` then `x`: Kill a pane
+
+### Manual Startup
+
+Alternatively, you can start each component manually in separate terminals:
 
 1. **Start SQLite MCP Server:**
    ```bash
@@ -260,5 +294,52 @@ Access the application at `http://localhost:5555`
 1.  Open your web browser and navigate to `http://localhost:5555`.
 2.  You will see the main page with the database schema displayed.
 3.  Enter a question about the HR data in the input box (e.g., "Who are the employees in the IT department?").
-4.  Click "Ask" to submit your question.
-5.  The application will convert your question to an SQL query, execute it, and display the results in a table.
+4.  Click "Submit" to process your question.
+5.  The application will:
+    - Convert your question to an SQL query
+    - Execute the query
+    - Display the results in a table
+    - Generate an interactive visualization in the dashboard
+
+### Dashboard Features
+
+The dashboard automatically visualizes your query results:
+
+1. **Chart Types**: Choose between:
+   - Bar Chart: Great for comparing values across categories
+   - Line Chart: Ideal for showing trends and patterns
+   - Pie Chart: Perfect for showing proportions and distributions
+
+2. **Automatic Data Processing**:
+   - Numeric data is visualized directly
+   - Categorical data shows count distributions
+   - Grouped data is automatically aggregated
+
+3. **Interactive Elements**:
+   - Hover over data points to see exact values
+   - Click legend items to show/hide data series
+   - Switch between chart types in real-time
+
+### Example Queries
+
+Try these queries to see different visualization types:
+
+1. Distribution Analysis:
+   ```
+   Show the number of employees in each department
+   ```
+
+2. Salary Analysis:
+   ```
+   What is the average salary by department?
+   ```
+
+3. Job Distribution:
+   ```
+   How many employees are there in each job role?
+   ```
+
+4. Temporal Analysis:
+   ```
+   Show the number of employees hired each year
+   ```
